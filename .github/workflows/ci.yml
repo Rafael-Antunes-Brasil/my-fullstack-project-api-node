@@ -1,0 +1,27 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main  # Define que o workflow roda ao fazer push no branch main
+  pull_request:
+    branches:
+      - main  # Também roda quando uma pull request é feita para o branch main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # Define que o job será executado em um ambiente Ubuntu
+
+    strategy:
+      matrix:
+        node-version: [14, 16]  # Testa em múltiplas versões do Node.js
+
+    steps:
+    - uses: actions/checkout@v3  # Faz o checkout do código no repositório
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}  # Configura a versão do Node.js
+    - run: npm install  # Instala as dependências do projeto
+    - run: npm test  # Roda os testes
+    - run: npm run build  # Cria o build do projeto
