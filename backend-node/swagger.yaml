@@ -1,0 +1,51 @@
+swagger: '2.0'
+info:
+  title: My Node.js API
+  description: API para gerenciar itens
+  version: 1.0.0
+host: localhost:3000
+basePath: /api
+schemes:
+  - http
+paths:
+  /items:
+    get:
+      summary: Retorna todos os itens
+      description: Obtém uma lista de todos os itens cadastrados
+      responses:
+        '200':
+          description: Lista de itens
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Item'
+    post:
+      summary: Cria um novo item
+      description: Adiciona um novo item à lista
+      parameters:
+        - in: body
+          name: body
+          description: Dados do item a ser criado
+          required: true
+          schema:
+            $ref: '#/definitions/Item'
+      responses:
+        '201':
+          description: Item criado com sucesso
+          schema:
+            $ref: '#/definitions/Item'
+        '400':
+          description: Erro de validação
+          
+definitions:
+  Item:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        example: "Nome do Item"
+      description:
+        type: string
+        example: "Descrição do Item"

@@ -1,20 +1,17 @@
 const express = require('express');
 const sequelize = require('./config/database');
-const Item = require('./models/item');
+const itemRoutes = require('./routes/itemRoutes');
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
 
 const app = express();
 app.use(express.json());
 
-// Routes
-app.get('/items', async (req, res) => {
-  const items = await Item.findAll();
-  res.json(items);
-});
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-app.post('/items', async (req, res) => {
-  const item = await Item.create(req.body);
-  res.status(201).json(item);
-});
+// Routes
+app.use('/api', itemRoutes);
 
 // Sync and start server
 const PORT = process.env.PORT || 3000;
